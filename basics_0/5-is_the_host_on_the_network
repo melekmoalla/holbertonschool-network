@@ -2,9 +2,22 @@
 #Write a Bash script that pings an IP address passed as an argument.
 
 
-for ip in "$@"; do
-    if ping -c 1 -q "$ip"
-    then echo "L'address $ip ping"
-    else Usage: 5-is_the_host_on_the_network {IP_ADDRESS}
-    fi
-done
+import sys
+import subprocess
+
+def ping_host(ip_address):
+    command = ['ping', '-c', '5', ip_address]
+    result = subprocess.run(command, capture_output=True, text=True)
+    return result.stdout
+
+def display_usage():
+    print("Usage: 5-is_the_host_on_the_network {IP_ADDRESS}")
+
+# Check if an argument is provided
+if len(sys.argv) > 1:
+    ip_address = sys.argv[1]
+    output = ping_host(ip_address)
+    print(output)
+else:
+    display_usage()
+
